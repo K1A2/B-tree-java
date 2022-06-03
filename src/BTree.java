@@ -19,7 +19,7 @@ public class BTree {
                 int[] keys = currentNode.getKeys();
                 boolean find = false;
                 for (int i = 0;i < currentNode.getNumKeys();i++) {
-                    if (keys[i] != Integer.MAX_VALUE && keys[i] > newData) {
+                    if (keys[i] != Integer.MAX_VALUE && keys[i] >= newData) {
                         find = true;
                         currentNode = currentNode.getChildNode()[i];
                         break;
@@ -57,21 +57,27 @@ public class BTree {
     public void print() {
         System.out.println("===========");
         if (root != null) {
+            int prevLevel = 0;
             Deque<Object[]> deque = new ArrayDeque<>();
             deque.add(new Object[] {root, 1});
             while (!deque.isEmpty()) {
                 Object[] now = deque.pop();
                 Node nowNode = (Node)now[0];
                 int level = (int)now[1];
-                System.out.printf("레벨 %d: [ ", level);
+                if (prevLevel != level) {
+                    System.out.printf("\n레벨 %d\n", level);
+                    prevLevel = level;
+                }
+                System.out.printf("부모: %d [ ", (level != 1 ? nowNode.getParentNode().getKeys()[0] : 0));
                 for (int i : nowNode.getKeys()) {
                     if (i != Integer.MAX_VALUE) System.out.printf("%d ", i);
                 }
-                System.out.println("]");
+                System.out.printf("] -- ");
                 for (Node n : nowNode.getChildNode()) {
                     if (n != null) deque.add(new Object[] {n, level + 1});
                 }
             }
+            System.out.println("\n\n");
         } else {
             System.out.println("B-tree가 비었습니다.");
         }

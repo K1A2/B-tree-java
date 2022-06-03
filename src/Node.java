@@ -7,12 +7,14 @@ public class Node {
     private Node childNode[];
     private int numChild = 0;
     private Node parentNode;
+    private NodeSorter nodeSorter = null;
 
     public Node(int order) {
         this.order = order;
         this.childNode = new Node[order + 1];
         this.parentNode = null;
         this.keys = new int[order];
+        this.nodeSorter = new NodeSorter();
         Arrays.fill(this.keys, Integer.MAX_VALUE);
     }
 
@@ -83,5 +85,6 @@ public class Node {
     public void addChildNode(Node child) {
         childNode[numChild] = child;
         numChild++;
+        Arrays.sort(childNode, nodeSorter);
     }
 }
