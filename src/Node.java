@@ -26,7 +26,7 @@ public class Node {
         return keys;
     }
 
-    public Node[] getChildNode() {
+    public Node[] getChildrenNode() {
         return childNode;
     }
 
