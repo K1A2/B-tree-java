@@ -16,7 +16,7 @@ public class Visualization {
 
     public void setInformation(DefaultMutableTreeNode root) {
         JTree jt = new JTree(root);
-        JScrollPane jScrollPane = new JScrollPane(jt, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        JScrollPane jScrollPane = new JScrollPane(jt, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         frame.add(jScrollPane);
         frame.setSize(200,500);
     }
