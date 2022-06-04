@@ -19,10 +19,15 @@ public class BTree {
                 int[] keys = currentNode.getKeys();
                 boolean find = false;
                 for (int i = 0;i < currentNode.getNumKeys();i++) {
-                    if (keys[i] != Integer.MAX_VALUE && keys[i] >= newData) {
-                        find = true;
-                        currentNode = currentNode.getChildNode()[i];
-                        break;
+                    if (keys[i] != Integer.MAX_VALUE) {
+                        if (keys[i] > newData) {
+                            find = true;
+                            currentNode = currentNode.getChildNode()[i];
+                            break;
+                        } else if (keys[i] == newData) {
+                            System.out.printf("이미 %d가 존재합니다.\n", newData);
+                            return;
+                        }
                     }
                 }
                 if (!find) {
@@ -31,20 +36,19 @@ public class BTree {
             }
             if (currentNode.addKey(newData)) {
                 while (currentNode.getNumKeys() >= order) {
-                    int divide_key = currentNode.getKeys()[(order - 1) / 2];
+                    int divideKey = currentNode.getKeys()[(order - 1) / 2];
                     Node parentNode = currentNode.getParentNode();
                     if (parentNode != null) {
-                        parentNode.addKey(divide_key);
+                        parentNode.addKey(divideKey);
                     } else {
                         parentNode = new Node(order);
-                        parentNode.addKey(divide_key);
+                        parentNode.addKey(divideKey);
                         parentNode.addChildNode(currentNode);
                         currentNode.setParentNode(parentNode);
                     }
-                    Node newNode = currentNode.devideNode();
+                    Node newNode = currentNode.divideNode();
                     newNode.setParentNode(parentNode);
                     parentNode.addChildNode(newNode);
-//                    System.out.printf("key: %d, child count: %d\n", parentNode.getKeys()[0], parentNode.getNumChild());
                     if (currentNode == root) {
                         root = parentNode;
                     }
@@ -52,6 +56,10 @@ public class BTree {
                 }
             }
         }
+    }
+
+    public void deleteNode(int target) {
+
     }
 
     public void print() {

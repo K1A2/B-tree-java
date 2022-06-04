@@ -42,12 +42,21 @@ public class Node {
         this.parentNode = parentNode;
     }
 
-    public Node devideNode() {
+    public Node getParentNode() {
+        return parentNode;
+    }
+
+    public void setNumKeys(int numKeys) {
+        this.numKeys = numKeys;
+    }
+
+    public Node divideNode() {
         Node newNode = new Node(order);
-        int devide_key = keys[(order - 1) / 2];
-        keys[(order - 1) / 2] = Integer.MAX_VALUE;
+        int divideIdx = (order - 1) / 2;
+        int divideKey = keys[divideIdx];
+        keys[divideIdx] = Integer.MAX_VALUE;
         int toIdx = numKeys;
-        for (int i = (order - 1) / 2 + 1;i < toIdx;i++) {
+        for (int i = divideIdx + 1;i < toIdx;i++) {
             newNode.addKey(keys[i]);
             keys[i] = Integer.MAX_VALUE;
             numKeys--;
@@ -56,7 +65,7 @@ public class Node {
         if (numChild == order + 1) {
             toIdx = numChild;
             for (int i = 0;i < toIdx;i++) {
-                if (childNode[i].getKeys()[0] < devide_key) continue;
+                if (childNode[i].getKeys()[0] < divideKey) continue;
                 newNode.addChildNode(childNode[i]);
                 childNode[i].setParentNode(newNode);
                 childNode[i] = null;
@@ -66,11 +75,13 @@ public class Node {
         return newNode;
     }
 
-    public Node getParentNode() {
-        return parentNode;
-    }
-
     public boolean addKey(int key) {
+        for (int i = 0;i < numKeys;i++) {
+            if (keys[i] == key) {
+                System.out.printf("이미 %d가 존재합니다.\n", key);
+                return false;
+            }
+        }
         keys[numKeys] = key;
         Arrays.sort(keys);
         numKeys++;
