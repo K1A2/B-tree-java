@@ -8,7 +8,35 @@ public class BTree {
     private int order = 0;
 
     public BTree(int order) {
-        this.order = order;
+        if (order < 3) {
+            this.order = 3;
+        } else {
+            this.order = order;
+        }
+    }
+
+    private Object[] findNode(int target) {
+        Node currentNode = root;
+        while (currentNode.getNumChild() != 0) {
+            int[] keys = currentNode.getKeys();
+            boolean find = false;
+            for (int i = 0;i < currentNode.getNumKeys();i++) {
+                if (keys[i] != Integer.MAX_VALUE) {
+                    if (keys[i] > target) {
+                        find = true;
+                        currentNode = currentNode.getChildrenNode()[i];
+                        break;
+                    } else if (keys[i] == target) {
+                        System.out.printf("이미 %d가 존재합니다.\n", target);
+                        return new Object[] {false, currentNode};
+                    }
+                }
+            }
+            if (!find) {
+                currentNode = currentNode.getChildrenNode()[currentNode.getNumKeys()];
+            }
+        }
+        return new Object[] {true, currentNode};
     }
 
     public void insertNode(int newData) {
@@ -16,25 +44,12 @@ public class BTree {
             root = new Node(order);
             root.addKey(newData);
         } else {
-            Node currentNode = root;
-            while (currentNode.getNumChild() != 0) {
-                int[] keys = currentNode.getKeys();
-                boolean find = false;
-                for (int i = 0;i < currentNode.getNumKeys();i++) {
-                    if (keys[i] != Integer.MAX_VALUE) {
-                        if (keys[i] > newData) {
-                            find = true;
-                            currentNode = currentNode.getChildrenNode()[i];
-                            break;
-                        } else if (keys[i] == newData) {
-                            System.out.printf("이미 %d가 존재합니다.\n", newData);
-                            return;
-                        }
-                    }
-                }
-                if (!find) {
-                    currentNode = currentNode.getChildrenNode()[currentNode.getNumKeys()];
-                }
+            Object[] result =  findNode(newData);
+            Node currentNode = null;
+            if ((boolean)result[0]) {
+                currentNode = (Node)result[1];
+            } else {
+                return;
             }
             if (currentNode.addKey(newData)) {
                 while (currentNode.getNumKeys() >= order) {
@@ -100,7 +115,7 @@ public class BTree {
         if (root != null) {
             String keys = "[ ";
             for (int i : root.getKeys()) {
-                if (i != Integer.MAX_VALUE) keys += String.valueOf(i);
+                if (i != Integer.MAX_VALUE) keys += i + " ";
             }
             keys += "]";
             DefaultMutableTreeNode rootTreeNode = new DefaultMutableTreeNode(keys);
@@ -117,7 +132,7 @@ public class BTree {
                     if (n != null) {
                         keys = "[ ";
                         for (int i : n.getKeys()) {
-                            if (i != Integer.MAX_VALUE) keys += String.valueOf(i) + " ";
+                            if (i != Integer.MAX_VALUE) keys += i + " ";
                         }
                         keys += "]";
                         DefaultMutableTreeNode node = new DefaultMutableTreeNode(keys);
