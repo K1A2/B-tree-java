@@ -11,7 +11,6 @@ public class Visualization {
         frame = new JFrame();
         frame.setTitle("B-tree 시각화");
         frame.setSize(200, 500);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     public void setInformation(DefaultMutableTreeNode root) {
@@ -21,7 +20,8 @@ public class Visualization {
         frame.setSize(200,500);
     }
 
-    public void show() {
+    public void show(boolean autoExit) {
+        if (autoExit) frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
 }

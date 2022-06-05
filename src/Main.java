@@ -1,26 +1,93 @@
 import org.json.simple.JSONObject;
 
-public class Main {
-    public static void main(String[] args) {
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
+import java.util.Scanner;
 
+public class Main {
+    private static void writeFile(String s) {
+        File file = new File("./commands.txt");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.write(s.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void random() {
         Visualization visualization = new Visualization();
+        ArrayList<Integer> arrayList = new ArrayList<>();
+        Random random = new Random();
+
+        StringBuilder builder = new StringBuilder();
 
         BTree btree = new BTree(3);
-//        int[] insert = {8,77,57,26,74,0,15,49,71,15,17,95,35,95,2,56,9,29,19,24,20,50,46,15,51,59,40,64,23,2,91,45,45,84,73,78,17,22,97,31,27,4,58,25,0,32,56,2,16,81,77,23,87,67,8,32,61,38,93,18,96,81,76,93,41,73,95,10,28,80,68,21,6,51,80,9,61,45,25,88,1,66,84,24,84,71,7};
-//        System.out.printf("[");
-        for (int i = 0;i < 200;i ++) {
-//            System.out.printf("%d\n", insert[i]);
-//            tree_2.insertNode(insert[i]);
+        try {
+            for (int i = 0;i < 500;i ++) {
 
-            int insert = (int)(Math.random() * 1000);
-//            System.out.printf("%d,", insert);
-            btree.insertNode(insert);
-//            tree_2.print();
+                int command = random.nextInt(2);
+                if (command == 0) {
+                    int insert = random.nextInt(1000);
+                    if (arrayList.contains(insert)) continue;
+                    arrayList.add(insert);
+                    builder.append("i " + insert + "\n");
+                    btree.insertNode(insert);
+                } else {
+                    if (arrayList.size() == 0) continue;
+                    int pos = random.nextInt(arrayList.size());
+                    int delete = arrayList.remove(pos);
+                    builder.append("d " + delete + "\n");
+                    btree.deleteNode(delete);
+                }
+                System.out.println("입력 목록: " + Arrays.toString(arrayList.toArray()));
+            }
+        } catch (Exception e) {
+            writeFile(builder.toString());
+            System.out.println(e.getMessage());
+            return;
         }
-//        System.out.println("]");
         btree.print();
+        writeFile(builder.toString());
 
         visualization.setInformation(btree.getTreeData());
-        visualization.show();
+        visualization.show(true);
+    }
+
+    private static void input() {
+        Visualization visualization = new Visualization();
+
+        BTree btree = new BTree(5);
+        String i = "";
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            i = scanner.nextLine();
+            if (i.equals("q")) break;
+            System.out.println(i);
+            String[] commands = i.split("\\s++");
+            switch (commands[0]) {
+                case "i":
+                    btree.insertNode(Integer.parseInt(commands[1]));
+                    break;
+                case "d":
+                    btree.deleteNode(Integer.parseInt(commands[1]));
+                    break;
+                case "s":
+                    visualization.setInformation(btree.getTreeData());
+                    visualization.show(false);
+                    break;
+            }
+            btree.print();
+        }
+    }
+
+    public static void main(String[] args) {
+        random();
+//        input();
     }
 }

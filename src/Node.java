@@ -1,24 +1,28 @@
 import java.util.Arrays;
 
 public class Node {
+    private static final int NODE_DATA_NULL = Integer.MAX_VALUE;
+
     private int order = 0;
     private int keys[];
     private int numKeys = 0;
-    private Node childNode[];
-    private int numChild = 0;
+    private Node childrenNodes[];
+    private int numChildren = 0;
     private Node parentNode;
     private NodeSorter nodeSorter = null;
 
     public Node(int order) {
         this.order = order;
-        this.childNode = new Node[order + 1];
+        int least = (int) Math.ceil(order / 2.0);
+
+        this.childrenNodes = new Node[order + least + 1];
         this.parentNode = null;
-        this.keys = new int[order];
+        this.keys = new int[order + least];
         this.nodeSorter = new NodeSorter();
-        Arrays.fill(this.keys, Integer.MAX_VALUE);
+        Arrays.fill(this.keys, NODE_DATA_NULL);
     }
 
-    public int getNumKeys() {
+    public int getKeysNum() {
         return numKeys;
     }
 
@@ -26,16 +30,16 @@ public class Node {
         return keys;
     }
 
-    public Node[] getChildrenNode() {
-        return childNode;
+    public Node[] getChildrenNodes() {
+        return childrenNodes;
     }
 
-    public int getNumChild() {
-        return numChild;
+    public int getChildrenNum() {
+        return numChildren;
     }
 
-    public void setChildNode(Node[] childNode) {
-        this.childNode = childNode;
+    public void setChildrenNodes(Node[] childrenNodes) {
+        this.childrenNodes = childrenNodes;
     }
 
     public void setParentNode(Node parentNode) {
@@ -50,26 +54,34 @@ public class Node {
         this.numKeys = numKeys;
     }
 
-    public Node divideNode() {
-        Node newNode = new Node(order);
-        int divideIdx = (order - 1) / 2;
+    public int getKey(int idx) {
+        return keys[idx];
+    }
+
+    public Node getChildNode(int idx) {
+        return childrenNodes[idx];
+    }
+
+    public Node divideNode(int total) {
+        Node newNode = new Node(total);
+        int divideIdx = (total - 1) / 2;
         int divideKey = keys[divideIdx];
-        keys[divideIdx] = Integer.MAX_VALUE;
+        keys[divideIdx] = NODE_DATA_NULL;
         int toIdx = numKeys;
         for (int i = divideIdx + 1;i < toIdx;i++) {
             newNode.addKey(keys[i]);
-            keys[i] = Integer.MAX_VALUE;
+            keys[i] = NODE_DATA_NULL;
             numKeys--;
         }
         numKeys--;
-        if (numChild == order + 1) {
-            toIdx = numChild;
+        if (numChildren == total + 1) {
+            toIdx = numChildren;
             for (int i = 0;i < toIdx;i++) {
-                if (childNode[i].getKeys()[0] < divideKey) continue;
-                newNode.addChildNode(childNode[i]);
-                childNode[i].setParentNode(newNode);
-                childNode[i] = null;
-                numChild--;
+                if (childrenNodes[i].getKeys()[0] < divideKey) continue;
+                newNode.addChildNode(childrenNodes[i]);
+                childrenNodes[i].setParentNode(newNode);
+                childrenNodes[i] = null;
+                numChildren--;
             }
         }
         return newNode;
@@ -94,8 +106,24 @@ public class Node {
     }
 
     public void addChildNode(Node child) {
-        childNode[numChild] = child;
-        numChild++;
-        Arrays.sort(childNode, nodeSorter);
+        childrenNodes[numChildren] = child;
+        numChildren++;
+        Arrays.sort(childrenNodes, nodeSorter);
+    }
+
+    public void deleteKey(int targetIdx) {
+        int i = targetIdx;
+        for (;i < numKeys;i++) {
+            keys[i] = keys[i + 1];
+        }
+        numKeys--;
+    }
+
+    public void deleteChildNode(int targetIdx) {
+        int i = targetIdx;
+        for (; i < numChildren; i++) {
+            childrenNodes[i] = childrenNodes[i + 1];
+        }
+        numChildren--;
     }
 }
