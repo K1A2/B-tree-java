@@ -20,6 +20,12 @@ public class BTree {
         }
     }
 
+    /**
+     * 키를 검색하는 함수.
+     *
+     * @param target 대상 값
+     * @return 존재한다면 노드와 위치를 리턴, 존재하지 않는다면 키가 추가될 수 있는 노드를 리턴.
+     */
     private Object[] findNode(int target) {
         Node currentNode = root;
         while (currentNode.getChildrenNum() != 0) {
@@ -45,6 +51,11 @@ public class BTree {
         return new Object[] {KEY_NOT_EXIST, currentNode};
     }
 
+    /**
+     * B-tree에 키를 추가하는 함수.
+     *
+     * @param newData 추가 할 값
+     */
     public void insertNode(int newData) {
         if (root == null) {
             root = new Node(order);
@@ -82,6 +93,12 @@ public class BTree {
         }
     }
 
+    /**
+     * 대상 노드가 부모노드의 몇 번째 자식인지 검색하는 함수.
+     *
+     * @param targetNode 대상 노드
+     * @return 부모 노드에서의 위치 리턴. 존재하지 않는다면 -1 리턴.
+     */
     private int findChildrenPosition(Node targetNode) {
         Node parent = targetNode.getParentNode();
         for (int idx = 0; idx < parent.getChildrenNum(); idx++) {
@@ -92,10 +109,24 @@ public class BTree {
         return -1;
     }
 
+    /**
+     * 대상 노드의 형제 노드를 가져오는 함수.
+     *
+     * @param currNode 대상 노드
+     * @param idx 형제 노드의 위치
+     * @return 형제 노드 리턴.
+     */
     private Node getSiblingNode(Node currNode, int idx) {
         return currNode.getParentNode().getChildNode(idx);
     }
 
+    /**
+     * 두 노드를 병합하는 함수.
+     *
+     * @param node1 대상 노드 1
+     * @param node2 대상 노드 2
+     * @return 병합된 노드 리턴.
+     */
     private Node mergeNode(Node node1, Node node2) {
         Node newNode = new Node(order);
         for (int i : node1.getKeys()) if (i != NODE_DATA_NULL) newNode.addKey(i);
@@ -111,6 +142,13 @@ public class BTree {
         return newNode;
     }
 
+    /**
+     * 삭제 할 값이 리프 노드에 있을때 삭제를 처리하는 함수.
+     *
+     * @param currentNode 삭제할 키가 존재하는 노드
+     * @param targetIdx 노드에서 삭제할 키의 번호
+     * @param leastKeyNum 노드가 가져야 할 최소 키 개수 + 1
+     */
     private void deleteLeafNodeKey(Node currentNode, int targetIdx, int leastKeyNum) {
         if (currentNode == root) {
             currentNode.deleteKey(targetIdx);
@@ -195,6 +233,14 @@ public class BTree {
         }
     }
 
+    /**
+     * 내부노드면서 자식이 리프노드가 아닌 노드에서 삭제를 처리하는 함수.
+     *
+     * @param currentNode 대상 노드
+     * @param leftChildNode 대상 노드의 왼쪽 자식 노드
+     * @param leastKeyNum 노드가 가져야 할 최소 키 개수 + 1
+     * @param targetIdx 삭제 할 키의 위치
+     */
     private void deleteWithSwapKey(Node currentNode, Node leftChildNode, int leastKeyNum, int targetIdx) {
         int maxKey = 0;
         while (leftChildNode.getChildrenNum() != 0) {
@@ -210,6 +256,13 @@ public class BTree {
         deleteLeafNodeKey(leftChildNode, leftChildNode.getKeysNum() - 1, leastKeyNum);
     }
 
+    /**
+     * 내부노드면서 키가 최소 개수보다 많을 때 삭제를 처리하는 함수.
+     * 
+     * @param currentNode 대상 노드
+     * @param targetIdx 삭제 할 키의 위치
+     * @param leastKeyNum 노드가 가져야 할 최소 키 개수 + 1
+     */
     private void deleteInternalNodeLeastUp(Node currentNode, int targetIdx, int leastKeyNum) {
         Node leftChildNode = currentNode.getChildNode(targetIdx);
         Node rightChildNode = currentNode.getChildNode(targetIdx + 1);
@@ -246,6 +299,13 @@ public class BTree {
         }
     }
 
+    /**
+     * 내부노드면서 키가 최소 개수보다 적을 때 삭제를 처리하는 함수.
+     *
+     * @param currentNode 대상 노드
+     * @param targetIdx 삭제 할 키의 위치
+     * @param leastKeyNum 노드가 가져야 할 최소 키 개수 + 1
+     */
     private void deleteInternalNodeLeastDown(Node currentNode, int targetIdx, int leastKeyNum) {
         Node parentNode = currentNode.getParentNode();
         if (targetIdx != SKIP_DELETE_KEY) {
@@ -300,6 +360,11 @@ public class BTree {
         }
     }
 
+    /**
+     * B-tree에서 대상 키 값을 삭제하는 함수
+     *
+     * @param target 삭제 할 키 값
+     */
     public void deleteNode(int target) {
         if (root != null) {
             Object[] result =  findNode(target);

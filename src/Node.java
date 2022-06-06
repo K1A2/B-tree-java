@@ -62,7 +62,15 @@ public class Node {
         return childrenNodes[idx];
     }
 
+    /**
+     * 키의 중간 위치를 기준으로 노드를 분할하는 함수.
+     * 노드 자신은 왼쪽 노드, 새로 만들어진 노드는 오른쪽 노드가 됨.
+     *
+     * @param total 키의 전체 길이
+     * @return 분할 된 오른쪽 노드 리턴.
+     */
     public Node divideNode(int total) {
+
         Node newNode = new Node(total);
         int divideIdx = (total - 1) / 2;
         int divideKey = keys[divideIdx];
@@ -87,6 +95,12 @@ public class Node {
         return newNode;
     }
 
+    /**
+     * 노드에 키를 추가하는 함수.
+     *
+     * @param key 추가 할 키 값
+     * @return 추가하고 난 뒤 키의 개수가 최대보다 많다면 true, 아니라면 false 리턴.
+     */
     public boolean addKey(int key) {
         for (int i = 0;i < numKeys;i++) {
             if (keys[i] == key) {
@@ -105,12 +119,22 @@ public class Node {
         }
     }
 
+    /**
+     * 자식노드를 추가하는 함수.
+     *
+     * @param child 추가 할 노드
+     */
     public void addChildNode(Node child) {
         childrenNodes[numChildren] = child;
         numChildren++;
         Arrays.sort(childrenNodes, nodeSorter);
     }
 
+    /**
+     * 키를 삭제하는 함수.
+     *
+     * @param targetIdx 삭제 할 키의 위치
+     */
     public void deleteKey(int targetIdx) {
         int i = targetIdx;
         for (;i < numKeys;i++) {
@@ -119,6 +143,11 @@ public class Node {
         numKeys--;
     }
 
+    /**
+     * 자식노드를 삭제하는 함수
+     *
+     * @param targetIdx 삭제 할 자식노드의 위치
+     */
     public void deleteChildNode(int targetIdx) {
         int i = targetIdx;
         for (; i < numChildren; i++) {
