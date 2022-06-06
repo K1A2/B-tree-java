@@ -27,7 +27,7 @@ public class Main {
 
         StringBuilder builder = new StringBuilder();
 
-        BTree btree = new BTree(3);
+        BTree btree = new BTree(4);
         try {
             for (int i = 0;i < 500;i ++) {
 
@@ -62,7 +62,7 @@ public class Main {
     private static void input() {
         Visualization visualization = new Visualization();
 
-        BTree btree = new BTree(5);
+        BTree btree = new BTree(4);
         String i = "";
         Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -87,7 +87,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        random();
-//        input();
+//        random();
+        input();
     }
 }

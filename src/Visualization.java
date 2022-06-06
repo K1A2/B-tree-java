@@ -7,13 +7,11 @@ import java.awt.*;
 public class Visualization {
     JFrame frame = null;
 
-    public Visualization() {
+    public void setInformation(DefaultMutableTreeNode root) {
         frame = new JFrame();
         frame.setTitle("B-tree 시각화");
         frame.setSize(200, 500);
-    }
 
-    public void setInformation(DefaultMutableTreeNode root) {
         JTree jt = new JTree(root);
         JScrollPane jScrollPane = new JScrollPane(jt, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         frame.add(jScrollPane);
@@ -21,7 +19,9 @@ public class Visualization {
     }
 
     public void show(boolean autoExit) {
-        if (autoExit) frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        if (autoExit) {
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        }
         frame.setVisible(true);
     }
 }
