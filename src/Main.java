@@ -30,22 +30,20 @@ public class Main {
         BTree btree = new BTree(4);
         try {
             for (int i = 0;i < 500;i ++) {
+                int insert = random.nextInt(1000);
+                if (arrayList.contains(insert)) continue;
+                arrayList.add(insert);
+                builder.append("i " + insert + "\n");
+                btree.insertNode(insert);
+            }
 
-                int command = random.nextInt(2);
-                if (command == 0) {
-                    int insert = random.nextInt(1000);
-                    if (arrayList.contains(insert)) continue;
-                    arrayList.add(insert);
-                    builder.append("i " + insert + "\n");
-                    btree.insertNode(insert);
-                } else {
-                    if (arrayList.size() == 0) continue;
-                    int pos = random.nextInt(arrayList.size());
-                    int delete = arrayList.remove(pos);
-                    builder.append("d " + delete + "\n");
-                    btree.deleteNode(delete);
-                }
-                System.out.println("입력 목록: " + Arrays.toString(arrayList.toArray()));
+            System.out.println("입력 목록: " + Arrays.toString(arrayList.toArray()));
+
+            for (int i = 0;i < 100;i++) {
+                int pos = random.nextInt(arrayList.size());
+                int delete = arrayList.remove(pos);
+                builder.append("d " + delete + "\n");
+                btree.deleteNode(delete);
             }
         } catch (Exception e) {
             writeFile(builder.toString());
