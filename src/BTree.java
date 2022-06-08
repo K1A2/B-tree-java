@@ -21,33 +21,50 @@ public class BTree {
     }
 
     /**
-     * 키를 검색하는 함수.
+     * 키를 탐색하는 함수.
      *
      * @param target 대상 값
      * @return 존재한다면 노드와 위치를 리턴, 존재하지 않는다면 키가 추가될 수 있는 노드를 리턴.
      */
     private Object[] findNode(int target) {
-        Node currentNode = root;
+        Node currentNode = root; // 현재 탐색중인 노드. 처음은 root
+        // currentNode가 리프 노드일때까지 반복
         while (currentNode.getChildrenNum() != 0) {
+            // 값을 찾거나 값이 있을 부분을 찾았다면 true, 아니면 false
             boolean find = false;
+            // currentNode의 키를 하나씩 가져와 검사
             for (int i = 0; i < currentNode.getKeysNum(); i++) {
+                // currentNode의 i번째 키가 대상 키보다 크다면
+                // 그 위치의 자식 노드가 키가 존재할 수 있는 노드
                 if (currentNode.getKey(i) > target) {
-                    find = true;
+                    find = true; // 찾았다 = true
+                    // 다음 자식 노드를 가져옴
                     currentNode = currentNode.getChildNode(i);
                     break;
                 } else if (currentNode.getKey(i) == target) {
+                    // 대상 키와 완전히 같은 키를 찾았다면
+                    // 키가 존재한다는 값, 키가 존재하는 노드,
+                    // keys의 몇 번째가 대상 키인지 리턴
                     return new Object[] {KEY_EXIST, currentNode, i};
                 }
             }
             if (!find) {
+                // 반복문 안에서 키 값이 존재할 다음 자식 노드를 찾지 못했다면
+                // currentNode의 가장 마지막 자식 노드를 currentNode로 지정
                 currentNode = currentNode.getChildNode(currentNode.getKeysNum());
             }
         }
+        // 최종적으로 지정된 리프 노드에 이미 키 값이 존재하는지 검사
         for (int i = 0;i < currentNode.getKeysNum();i++) {
             if (currentNode.getKey(i) == target) {
+                // 대상 키와 완전히 같은 키를 찾았다면
+                // 키가 존재한다는 값, 키가 존재하는 노드,
+                // keys의 몇 번째가 대상 키인지 리턴
                 return new Object[] {KEY_EXIST, currentNode, i};
             }
         }
+        // 대상 키와 완전히 같은 키를 찾지 못했다면
+        // 키가 존재하지 않는다는 값, 키가 존재할 수 있는 노드 리턴
         return new Object[] {KEY_NOT_EXIST, currentNode};
     }
 
@@ -57,36 +74,61 @@ public class BTree {
      * @param newData 추가 할 값
      */
     public void insertNode(int newData) {
-        if (root == null) {
+        if (root == null) { // B-tree가 비었다면
+            // 루트 노드를 만들고, 루트 노드에 키 추가
             root = new Node(order);
             root.addKey(newData);
         } else {
+            // findNode함수를 이용해 키 값이 이미 존재하는지 검사
             Object[] result =  findNode(newData);
             Node currentNode = null;
             if ((boolean)result[0] == KEY_NOT_EXIST) {
+                // 존재하지 않는다면
+                // 키 값을 추가할 수 있는 노드를 currentNode로 지정
                 currentNode = (Node)result[1];
             } else {
+                // 이미 존재한다면
+                // 키 중복을 방지하기 위해 함수 종료
                 System.out.printf("이미 %d가 존재합니다.\n", newData);
                 return;
             }
+            // 노드에 키 추가
             if (currentNode.addKey(newData)) {
+                // 노드가 가지는 키 개수가 최대 개수보다 많다면
                 while (currentNode.getKeysNum() >= order) {
+                    // keys의 중간 값을 구하고 divideKey에 저장
                     int divideKey = currentNode.getKey((order - 1) / 2);
+                    // 현재 노드의 부모 노드
                     Node parentNode = currentNode.getParentNode();
                     if (parentNode != null) {
+                        // 부모 노드가 null이 아니라면
+                        // = 현재 노드가 root 노드가 존재한다면
+                        // 부모 노드에 현재 노드의 중간 키 추가
                         parentNode.addKey(divideKey);
                     } else {
+                        // 부모 노드가 null 이라면,
+                        // = 현재 노드가 root 노드가 존재하지 않는다면
+                        // root 노드를 만들고 B-tree 레벨 증가
                         parentNode = new Node(order);
+                        // 새로 만든 루트 노드에 현재 노드의 중간 키 값 추가
                         parentNode.addKey(divideKey);
+                        // 새로 만든 루트 노드에 자식 노드로 현재 노드 추가
                         parentNode.addChildNode(currentNode);
+                        // 현재 노드의 부모 노드를 새로 만든 부모 노드로 지정
                         currentNode.setParentNode(parentNode);
                     }
-                    Node newNode = currentNode.divideNode(order);
-                    newNode.setParentNode(parentNode);
-                    parentNode.addChildNode(newNode);
+                    // divideNode 함수를 이용해 노드를 분할
+                    Node rightNode = currentNode.divideNode(order);
+                    // 새로 만든 오른쪽 노드의 부모 노드 지정
+                    rightNode.setParentNode(parentNode);
+                    // 오른쪽 노드를 부모 노드의 자식 노드로 지정
+                    parentNode.addChildNode(rightNode);
                     if (currentNode == root) {
+                        // 현재 노드가 root 노드와 같다면
+                        //현재 노드의 부모 노드를 root 노드로 지정
                         root = parentNode;
                     }
+                    // cuttentNode를 부모 노드로 지정
                     currentNode = parentNode;
                 }
             }
