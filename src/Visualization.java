@@ -1,5 +1,3 @@
-import org.json.simple.JSONObject;
-
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;

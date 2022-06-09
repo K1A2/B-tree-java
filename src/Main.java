@@ -1,5 +1,3 @@
-import org.json.simple.JSONObject;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
