@@ -15,9 +15,9 @@ public class Node {
         this.order = order;
         int least = (int) Math.ceil(order / 2.0);
 
-        this.childrenNodes = new Node[order + least];
+        this.childrenNodes = new Node[order + least + 1];
         this.parentNode = null;
-        this.keys = new int[order + least - 1];
+        this.keys = new int[order + least];
         this.nodeSorter = new NodeSorter();
         Arrays.fill(this.keys, NODE_DATA_NULL);
     }
