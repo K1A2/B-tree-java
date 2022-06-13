@@ -379,7 +379,7 @@ public class BTree {
             // 자식 노드가 리프 노드라면
             if (leftChildNode.getKeysNum() >= leastKeyNum) {
                 // 왼쪽 자식 노드가 키를 최소 개수보다 많이 가지고 있다면
-                currentNode.deleteKey(targetIdx); // 현재 자식 노드에서 키 삭제
+                currentNode.deleteKey(targetIdx); // 현재 노드에서 키 삭제
                 // 왼쪽 자식 노드의 가장 큰 값의 idx
                 int maxKeyIdx = leftChildNode.getKeysNum() - 1;
                 // 왼쪽 자식 노드의 가장 큰 키 값 저장
@@ -388,7 +388,7 @@ public class BTree {
                 currentNode.addKey(maxKey); // 현재 노드에 왼쪽 자식 노드에서 가장 큰 값을 추가
             } else if (rightChildNode.getKeysNum() >= leastKeyNum) {
                 // 오른쪽 자식 노드가 키를 최소 개수보다 많이 가지고 있다면
-                currentNode.deleteKey(targetIdx); // 현재 자식 노드에서 키 삭제
+                currentNode.deleteKey(targetIdx); // 현재 노드에서 키 삭제
                 int minKeyIdx = 0; // 오른쪽 자식 노드의 가장 작은 값의 idx
                 // 오른쪽 자식 노드의 가장 작은 키 값 저장
                 int minKey = rightChildNode.getKey(minKeyIdx);
@@ -396,16 +396,16 @@ public class BTree {
                 currentNode.addKey(minKey); // 현재 노드에 오른쪽 자식 노드에서 가장 작은 값을 추가
             } else if (currentNode.getKeysNum() >= leastKeyNum) {
                 // 현재 노드의 키 개수가 최소보다 크다면
-                currentNode.deleteKey(targetIdx); // 현재 자식 노드에서 키 삭제
+                currentNode.deleteKey(targetIdx); // 현재 노드에서 키 삭제
                 // 왼쪽 자식과 오른쪽 자식 병합
                 Node mergedNode = mergeNode(leftChildNode, rightChildNode);
                 // 병합된 노드에 부모 노드는 현재 노드 지정
                 mergedNode.setParentNode(currentNode);
 
-                // 부모 노드에서 병합 전 두 노드를 자식에서 삭제
+                // 현재 노드의 자식에서 병합 전 두 노드를 삭제
                 currentNode.deleteChildNode(findChildrenPosition(leftChildNode));
                 currentNode.deleteChildNode(findChildrenPosition(rightChildNode));
-                currentNode.addChildNode(mergedNode); // 부모 노드에 병합된 새 노드를 자식으로 추가
+                currentNode.addChildNode(mergedNode); // 현재 노드의 자식으로 병합된 새 노드를 추가
             } else {
                 // 자기자신과 모든 자식 노드의 키 개수가 최소 이하라면
                 if (currentNode == root && currentNode.getKeysNum() > 0) {
