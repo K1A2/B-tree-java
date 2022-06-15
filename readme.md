@@ -1,4 +1,6 @@
-# B-tree 구현
+# 자료구조론 Term Project 레포트
+
+인공지능학과 21학번 2021051412 김준철
 
 # B-tree 란?
 
@@ -168,6 +170,52 @@ currentNode가 리프 노드일때까지 반복하며 키 값이 들어갈 수 �
 3. 조건 2를 만족한다면, 함수 종료
 4. 조건 2를 만족할때까지 2번부터 반복.
 
+### 시각화
+
+1. 기본 삽입
+    
+    insert 2
+    
+    ![Untitled](./images/Untitled%2010.png)
+    
+2. 추가 후 키 개수가 최대일 때
+    1. 노드 분할
+        1. insert 2
+            
+            ![Untitled](./images/Untitled%2011.png)
+            
+        2. 추가한 노드의 중간값 부모 노드에 추가
+            
+            ![Untitled](./images/Untitled%2012.png)
+            
+        3. 현재 노드 분할
+            
+            ![Untitled](./images/Untitled%2013.png)
+            
+    2. 높이 증가
+        1. insert 2
+            
+            ![Untitled](./images/Untitled%2014.png)
+            
+        2. 부모 노드 생성 후 중간값 추가
+            
+            ![Untitled](./images/Untitled%2015.png)
+            
+    3. 분할 재귀
+        1. insert 10
+            
+            ![Untitled](./images/Untitled%2016.png)
+            
+        2. 노드 분할
+            
+            ![Untitled](./images/Untitled%2017.png)
+            
+        3. 분할 뒤 부모 노드도 키 값이 최대 개수보다 많아졌으므로, 노드 분할 한번 더 반복
+            
+            ![Untitled](./images/Untitled%2018.png)
+            
+        4. ㅇㅇ
+
 ## 키 추가 구현
 
 insertNode함수로 키를 추가한다.
@@ -175,7 +223,7 @@ insertNode함수로 키를 추가한다.
 - 파라미터
     - int newData: 추가할 키 값
 
-![Untitled](./images/Untitled%2010.png)
+![Untitled](./images/Untitled%2019.png)
 
 추가할 키 값이 존재하는지 찾고, 이미 존재한다면 함수 종료, 아니라면 추가할 노드를 가져오는 부분.
 
@@ -185,20 +233,20 @@ insertNode함수로 키를 추가한다.
 3. 키가 존재하지 않는다면 currentNode를 추가 가능한 노드로 지정
 4. 이미 존재한다면 키 중복 방지를 위해 함수 종료
 
-![Untitled](./images/Untitled%2011.png)
+![Untitled](./images/Untitled%2020.png)
 
 노드에 키를 추가하고, 키의 개수가 최대 개수 이상이라서 조건 2를 만족하지 않느다면, 노드를 분할하는 부분. 리프 노드부터 시작해서 한 레벨씩 올라가도록 bottom-up 방식으로 구현했다.
 
 1. addKey를 이용해서 값을 추가.
 2. addkey의 리턴값이 true라면 = 노드의 키 개수가 최대 개수 초과라면
-3. keys의 중간 idx 값을 divideIdx에 저장
-4. 현재 노드의 부모 노드가 존재한다면, 부모 노드에 keys의 중간 값을 추가
-5. 아니라면 새 부모 노드를 만들어 새 부모 노드에 keys의 중간 값 추가
-6. divideNode 함수를 이용해 함수 분할 (노드 분할)
-7. 분할된 오른쪽 노드의 부모 노드 지정. 부모 노드도 자식 노드로 오른쪽 노드 추가
-8. currentNode가 root 노드와 같다면 부모 노드를  root로 지정 (높이 증가)
-9. 현재 노드의 키 개수가 최대 개수보다 작을때 까지 3번부터 반복 (분할 재귀)
-10. addkey리턴값이 false라면 = 노드 키 개수가 최대 개수 이하라면, 함수 종료 (기본 삽입)
+    1. keys의 중간 idx 값을 divideIdx에 저장
+    2. 현재 노드의 부모 노드가 존재한다면, 부모 노드에 keys의 중간 값을 추가
+    3. 아니라면 새 부모 노드를 만들어 새 부모 노드에 keys의 중간 값 추가
+    4. divideNode 함수를 이용해 노드 분할 (노드 분할)
+    5. 분할된 오른쪽 노드의 부모 노드 지정. 부모 노드도 자식 노드로 오른쪽 노드 추가
+    6. currentNode가 root 노드와 같다면 부모 노드를  root로 지정 (높이 증가)
+    7. 현재 노드의 키 개수가 최대 개수보다 작을때 까지 3번부터 반복 (분할 재귀)
+3. addkey리턴값이 false라면 = 노드 키 개수가 최대 개수 이하라면, 함수 종료
 
 ## 키 삭제 구현
 
@@ -265,6 +313,103 @@ insertNode함수로 키를 추가한다.
 4. 2번에서 병합된 현재 노드의 부모 노드가 키를 최소 개수 미만으로 가지고 있다면
     1. 2번부터 재귀적으로 다시 실행
 
+## 시각화
+
+1. 기본 삭제
+    1. delete 8
+        
+        ![Untitled](./images/Untitled%2021.png)
+        
+        ![Untitled](./images/Untitled%2022.png)
+        
+2. 형제 노드 빌리기
+    1. delete 5
+        
+        ![Untitled](./images/Untitled%2023.png)
+        
+        ![Untitled](./images/Untitled%2024.png)
+        
+    2. 부모 키를 비어있는 현재 노드로 이동
+        
+        ![Untitled](./images/Untitled%2025.png)
+        
+    3. 자식 노드 키를 비어있는 부모 노드로 이동
+        
+        ![Untitled](./images/Untitled%2026.png)
+        
+3. 자식 노드 빌리기
+    1. delete 15
+        
+        ![Untitled](./images/Untitled%2027.png)
+        
+        ![Untitled](./images/Untitled%2028.png)
+        
+    2. 여유있는 자식 노드에서 키 가져오기
+        
+        ![Untitled](./images/Untitled%2029.png)
+        
+4. 노드 병합
+    1. delete 25
+        
+        ![Untitled](./images/Untitled%2030.png)
+        
+        ![Untitled](./images/Untitled%2031.png)
+        
+    2. 자식 노드 병합
+        
+        ![Untitled](./images/Untitled%2032.png)
+        
+5. 높이 감소
+    1. delete 10
+        
+        ![Untitled](./images/Untitled%2033.png)
+        
+        ![Untitled](./images/Untitled%2034.png)
+        
+    2. 자식 노드 병합
+        
+        ![Untitled](./images/Untitled%2035.png)
+        
+    3. 부모 키 형제 노드로 이동
+        
+        ![Untitled](./images/Untitled%2036.png)
+        
+    4. 형제 노드와 병합
+        
+        ![Untitled](./images/Untitled%2037.png)
+        
+    5. 아무것도 없는 루트 노드 삭제
+        
+        ![Untitled](./images/Untitled%2038.png)
+        
+6. 병합 재귀
+    1. delete 10
+        
+        ![Untitled](./images/Untitled%2039.png)
+        
+        ![Untitled](./images/Untitled%2040.png)
+        
+    2. 자식 노드 병합
+        
+        ![Untitled](./images/Untitled%2041.png)
+        
+    3. 부모 키 형제 노드로 이동
+        
+        ![Untitled](./images/Untitled%2042.png)
+        
+    4. 형제 노드와 현재 노드 병합
+        
+        ![Untitled](./images/Untitled%2043.png)
+        
+    5. 부모 노드가 b 단계와 같은 상태이므로 노드 병합 반복
+        
+        ![Untitled](./images/Untitled%2044.png)
+        
+    6. 높이 감소
+        
+        ![Untitled](./images/Untitled%2045.png)
+        
+
 ## 각 케이스별 실제 구현
 
 ### 공통적인 함수
@@ -274,7 +419,7 @@ deleteNode 함수로 크게 어떤 케이스에 해당되는 삭제 과정인지
 - 파라미터
     - int target: 삭제할 키
 
-![Untitled](./images/Untitled%2012.png)
+![Untitled](./images/Untitled%2046.png)
 
 케이스가 크게 삭제할 키가 리프 노드에 있는지와 없는지로 나뉘므로, 삭제할 키가 리프 노드인지 검사하고 리프 노드라면 case1 함수를, 아니라면 case2 함수 실행.
 
@@ -287,7 +432,7 @@ deleteLeafNodeKey 함수로 case1의 경우를 처리.
     - int targetIdx: currentNode에서 삭제할 키의 keys 배열에서 위치
     - int leastKeyNum: 노드가 가지고 있어야 할 최소 키 개수 + 1
 
-![Untitled](./images/Untitled%2013.png)
+![Untitled](./images/Untitled%2047.png)
 
 case1.1을 처리하는 부분
 
@@ -295,14 +440,14 @@ case1.1을 처리하는 부분
 2. 루트 노드는 키를 최소 1개까지 보유 가능하므로 바로 삭제. (기본 삭제)
 3. 삭제 후 키 개수가 0개라면 B-tree를 빈 트리로 처리
 
-![Untitled](./images/Untitled%2014.png)
+![Untitled](./images/Untitled%2048.png)
 
 case1.2를 처리하는 부분.
 
 1. 현재 노드의 키 개수가 최소보다 많다면
 2. 키 삭제. (기본 삭제)
 
-![Untitled](./images/Untitled%2015.png)
+![Untitled](./images/Untitled%2049.png)
 
 case1.3를 처리하는 부분. (형제 노드 빌리기)
 
@@ -314,11 +459,11 @@ case1.3를 처리하는 부분. (형제 노드 빌리기)
 6. 현재 노드에 추가한 키는 부모 노드에서 삭제
 7. 부모 노드에 왼쪽 형제 노드의 가장 큰 값 추가
 
-![Untitled](./images/Untitled%2016.png)
+![Untitled](./images/Untitled%2050.png)
 
 case1.4를 처리하는 부분. case1.3의 처리 과정에서 왼쪽 형제 노드가 오른쪽 형제 노드로, 가장 큰 값이 가장 작은 값으로 바꾸어 생각하면 된다. (형제 노드 빌리기)
 
-![Untitled](./images/Untitled%2017.png)
+![Untitled](./images/Untitled%2051.png)
 
 case 1.5를 처리하는 부분. (노드 병합)
 
@@ -330,7 +475,7 @@ case 1.5를 처리하는 부분. (노드 병합)
 6. 부모 노드에서 병합 전 두 노드를 자식에서 삭제하고, mergedNode를 부모 노드에 자식 노드로 추가
 7. mergedNode의 부모를 병합 전 현재 노드의 부모 노드로 지정
 
-![Untitled](./images/Untitled%2018.png)
+![Untitled](./images/Untitled%2052.png)
 
 case1.6을 처리하는 부분. case1.5를 처리하고, 부모 노드의 상황에 따라 다음 함수 실행을 결정한다.
 
@@ -346,22 +491,24 @@ case1.6을 처리하는 부분. case1.5를 처리하고, 부모 노드의 상황
         - int targetIdx: currentNode에서 삭제할 키의 keys 배열에서 위치
         - int leastKeyNum: 노드가 가지고 있어야 할 최소 키 개수 + 1
     
-    ![Untitled](./images/Untitled%2019.png)
+    ![Untitled](./images/Untitled%2053.png)
+    
+    ![Untitled](./images/Untitled%2054.png)
     
     case 2를 처리하는 부분.
     
     1. 현재 노드의 자식 노드가 리프 노드가 맞다면
-        1. 왼쪽 자식 노드가 키를 최소 개수보다 많이 가지고 있다면 (형제 노드 빌리기)
-            1. 현재 자식 노드에서 키 삭제
+        1. 왼쪽 자식 노드가 키를 최소 개수보다 많이 가지고 있다면 (자식 노드 빌리기)
+            1. 현재 노드에서 키 삭제
             2. 왼쪽 자식 노드의 가장 큰 키 값 저장하고, 왼쪽 자식 노드에서는 삭제
             3. 현재 노드에 왼쪽 자식 노드에서 가장 큰 값을 추가
-        2. 오른쪽 자식 노드가 키를 최소 개수보다 많이 가지고 있다면 (형제 노드 빌리기)
-            1. 현재 자식 노드에서 키 삭제
+        2. 오른쪽 자식 노드가 키를 최소 개수보다 많이 가지고 있다면 (자식 노드 빌리기)
+            1. 현재 노드에서 키 삭제
             2. 오른쪽 자식 노드의 가장 작은 키 값 저장하고, 오른쪽 자식 노드에서는 삭제
             3. 현재 노드에 오른쪽 자식 노드에서 가장 작은 값을 추가
         3. 현재 노드의 키 개수가 최소보다 크다면 (노드 병합)
-            1. 현재 자식 노드에서 키 삭제
-            2. 왼쪽 자식과 오른쪽 자식 병합 후, 병합된 노드의 현재 노드를 부모 노드로 지정
+            1. 현재 노드에서 키 삭제
+            2. 왼쪽 자식과 오른쪽 자식 병합 후, 병합된 노드의 부모 노드를 현재 노드로 지정
         4. 현재 노드 자신과 바로 아래 레벨의 모든 자식 노드의 키 개수가 최소 이하라면
             1. 현재 노드가 root면서 키 개수가 0개보다 많다면 deleteWithSawpKey 함수로 case 2.2 처리 (자식 노드 빌리기)
             2. 아니라면 case 3으로 이동
@@ -375,7 +522,7 @@ case1.6을 처리하는 부분. case1.5를 처리하고, 부모 노드의 상황
         - int leastKeyNum: 노드가 가져야할 최소 키 개수 + 1
         - int targetIdx: currentNode에서 삭제할 키의 idx
     
-    ![Untitled](./images/Untitled%2020.png)
+    ![Untitled](./images/Untitled%2055.png)
     
     삭제해야할 키 값을 리프 노드의 키 값과 교환하며 case 1로 만들어 처리.
     
@@ -392,20 +539,20 @@ deleteInternalNodeLeastDown으로 case 3의 경우 처리
     - int targetIdx: 삭제할 키의 idx. 만약 값이 -1이라면, 키 삭제 부분은 건너 뛰고 노드 병합으로 바로 넘어감
     - int leastKeyNum: 노드가 가져야 할 최소 키 개수 +1
     
-    ![Untitled](./images/Untitled%2021.png)
+    ![Untitled](./images/Untitled%2056.png)
     
 
-현재 노드에서 키를 삭제하고 두 자식 노드를 병합하는 부분. 이 부분을 건너뛰게 만든 이유는 바로 case3.2로 넘어오는 case1.6 때문이다.
+현재 노드에서 키를 삭제하고 두 자식 노드를 병합하는 부분. 이 부분을 건너뛸 수 있게 만든 이유는 바로 case3.2로 넘어오는 case1.6 때문이다.
 
 1. 현재 노드에서 대상 키 삭제
 2. 현재 노드의 좌/우 자식 노드들을 하나로 병합. (노드 병합)
 3. 병합된 노드를 새 자식 노드로 추가
 
-![Untitled](./images/Untitled%2022.png)
+![Untitled](./images/Untitled%2057.png)
 
 현재 노드가 root 노드라면, 병합하고 하나밖에 없는 자식 노드를 가져와 root 노드로 지정. (높이 감소)
 
-![Untitled](./images/Untitled%2023.png)
+![Untitled](./images/Untitled%2058.png)
 
 현재 노드와 형제 노드를 결합하여 하나의 노드를 만드는 부분. (노드 병합)
 
@@ -413,7 +560,7 @@ deleteInternalNodeLeastDown으로 case 3의 경우 처리
 2. 가져온 형제 노드에 부모 키 값 넣고, 부모 노드에서는 삭제
 3. 현재 노드와 형제 노드를 병합하고, 부모 노드에 추가.
 
-![Untitled](./images/Untitled%2024.png)
+![Untitled](./images/Untitled%2059.png)
 
 노드를 병합하고 난 뒤에 상태를 보며 적절한 단계로 넘어가게 해주는 부분.
 
