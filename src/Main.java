@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 public class Main {
     private static void writeFile(String s) {
+        // 랜덤 테스트를 진행한 후, 명령어 목록을 텍스트 파일로 저장
         File file = new File("./commands.txt");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(s.toString());
@@ -18,14 +19,15 @@ public class Main {
         }
     }
 
-    private static void random() {
+    private static void random(int order) {
+        // 랜덤한 숫자를 뽑아 테스트 진행
         Visualization visualization = new Visualization();
         ArrayList<Integer> arrayList = new ArrayList<>();
         Random random = new Random();
 
         StringBuilder builder = new StringBuilder();
 
-        BTree btree = new BTree(7);
+        BTree btree = new BTree(order);
         try {
             for (int i = 0;i < 500;i ++) {
                 int insert = random.nextInt(1000);
@@ -55,13 +57,21 @@ public class Main {
         visualization.show(true);
     }
 
-    private static void input() {
+    private static void input(int order) {
+        // 명령어를 입력하여 B-tree에 데이터를 추가/삭제할 수 있는 함수
+        System.out.println("\n=================== 명령어 입력 테스트 ===================");
+        System.out.println("입력 i [숫자]: 숫자 추가");
+        System.out.println("입력 d [숫자]: 숫자 삭제");
+        System.out.println("입력 s: B-tree 시각화");
+        System.out.println("입력 q: 종료");
+
         Visualization visualization = new Visualization();
 
-        BTree btree = new BTree(6);
+        BTree btree = new BTree(order);
         String i = "";
         Scanner scanner = new Scanner(System.in);
         while (true) {
+            System.out.printf("입력: ");
             i = scanner.nextLine();
             if (i.equals("q")) break;
             System.out.println(i);
@@ -83,7 +93,31 @@ public class Main {
     }
 
     public static void main(String[] args) {
-//        random();
-        input();
+        System.out.println("=================== B-tree 구현 ===================");
+
+        Scanner scanner = new Scanner(System.in);
+        int order = 3;
+
+        do {
+            try {
+                System.out.printf("차수 입력: ");
+                order = scanner.nextInt();
+            } catch (Exception e) {
+                order = -1;
+                scanner = new Scanner(System.in);
+            }
+        } while (order < 3);
+
+        System.out.printf("입력 1: 랜덤한 값으로 테스트\n입력 2: 직접 명령어를 입력해서 테스트\n입력: ");
+        switch (scanner.nextInt()) {
+            case 1:
+                random(order);
+                break;
+            case 2:
+                input(order);
+                break;
+            default:
+                System.out.println("종료");
+        }
     }
 }

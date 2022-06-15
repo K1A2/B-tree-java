@@ -535,7 +535,7 @@ public class BTree {
     }
 
     public void print() {
-        System.out.println("===========");
+        System.out.println("====================");
         if (root != null) {
             int prevLevel = 0;
 
