@@ -1,7 +1,5 @@
 # 자료구조론 Term Project 레포트
 
-인공지능학과 21학번 2021051412 김준철
-
 # B-tree 란?
 
 항상 균형을 유지하는 balanced tree의 한 종류이다. 일반적인 이진트리와 다르게 한 노드에 여러개의 키를 가질 수 있다는 점이 특징이다.
@@ -570,3 +568,200 @@ deleteInternalNodeLeastDown으로 case 3의 경우 처리
     1. case 3.2로 바로 이동. deleteInternalNodeLeastDown을 실행하며 targetIdx값을 -1로 넘겨준다.  (병합 재귀)
 3. 부모 노드가 root 노드면서 비었다면
     1. 병합된 노드를 새 root 노드로 지정  (높이 감소)
+
+## 테스트 케이스
+
+테스트 케이스의 차수는 3이다.
+
+명령어 순서는 다음과 같다.
+
+```
+i,100,삽입,기본 삽입
+i,50,삽입,기본 삽입
+i,150,삽입,노드 분할/높이 증가
+i,25,삽입,기본 삽입
+i,75,삽입,노드 분할
+i,125,삽입,기본 삽입
+i,175,삽입,분할 재귀/높이 증가
+i,10,삽입,기본 삽입
+d,25,삭제,기본 삭제
+i,90,삽입,기본 삽입
+d,10,삭제,형제 노드 빌리기
+i,10,삽입,기본 삽입
+i,80,삽입,기본 삽입
+d,75,삭제,자식 노드 빌리기
+d,100,삭제,자식 노드 빌리기
+i,100,삽입,기본 삽입
+i,140,삽입,노드 분할
+d,150,삭제,노드 병합
+d,50,삭제,노드 병합/높이 감소
+i,150,삽입,분할 재귀/높이 증가
+i,45,삽입,노드 분할
+i,95,삽입,기본 삽입
+i,110,삽입,분할 재귀
+i,160,삽입,기본 삽입
+i,180,삽입,노드 분할
+i,155,삽입,기본 삽입
+i,165,삽입,분할 재귀/높이 증가
+d,10,삭제,병합 재귀/높이 감소
+```
+
+1. i,100,삽입,기본 삽입
+    
+    ![tc1.png](./images/tc1.png)
+    
+2. i,50,삽입,기본 삽입
+    
+    ![tc2.png](./images/tc2.png)
+    
+3. i,150,삽입,노드 분할/높이 증가
+    
+    ![tc3.png](./images/tc3.png)
+    
+    ![tc4.png](./images/tc4.png)
+    
+4. i,25,삽입,기본 삽입
+    
+    ![tc5.png](./images/tc5.png)
+    
+5. i,75,삽입,노드 분할
+    
+    ![tc6.png](./images/tc6.png)
+    
+    ![tc7.png](./images/tc7.png)
+    
+6. i,125,삽입,기본 삽입
+    
+    ![tc8.png](./images/tc8.png)
+    
+7. i,175,삽입,분할 재귀/높이 증가
+    
+    ![tc9.png](./images/tc9.png)
+    
+    ![tc10.png](./images/tc10.png)
+    
+    ![tc11.png](./images/tc11.png)
+    
+8. i,10,삽입,기본 삽입
+    
+    ![tc12.png](./images/tc12.png)
+    
+9. d,25,삭제,기본 삭제
+    
+    ![tc13.png](./images/tc13.png)
+    
+10. i,90,삽입,기본 삽입
+    
+    ![tc14.png](./images/tc14.png)
+    
+11. d,10,삭제,형제 노드 빌리기
+    
+    ![tc15.png](./images/tc15.png)
+    
+    ![tc16.png](./images/tc16.png)
+    
+    ![tc17.png](./images/tc17.png)
+    
+12. i,10,삽입,기본 삽입
+    
+    ![tc18.png](./images/tc18.png)
+    
+13. i,80,삽입,기본 삽입
+    
+    ![tc19.png](./images/tc19.png)
+    
+14. d,75,삭제,자식 노드 빌리기
+    
+    ![tc20.png](./images/tc20.png)
+    
+    ![tc21.png](./images/tc21.png)
+    
+15. d,100,삭제,자식 노드 빌리기
+    
+    ![tc22.png](./images/tc22.png)
+    
+    ![tc23.png](./images/tc23.png)
+    
+16. i,100,삽입,기본 삽입
+    
+    ![tc24.png](./images/tc24.png)
+    
+17. i,140,삽입,노드 분할
+    
+    ![tc25.png](./images/tc25.png)
+    
+    ![tc26.png](./images/tc26.png)
+    
+18. d,150,삭제,노드 병합
+    
+    ![tc27.png](./images/tc27.png)
+    
+19. d,50,삭제,노드 병합/높이 감소
+    
+    ![tc28.png](./images/tc28.png)
+    
+    ![tc29.png](./images/tc29.png)
+    
+    ![tc30.png](./images/tc30.png)
+    
+    ![tc31.png](./images/tc31.png)
+    
+20. i,150,삽입,분할 재귀/높이 증가
+    
+    ![tc32.png](./images/tc32.png)
+    
+    ![tc33.png](./images/tc33.png)
+    
+    ![tc34.png](./images/tc34.png)
+    
+21. i,45,삽입,노드 분할
+    
+    ![tc35.png](./images/tc35.png)
+    
+    ![tc36.png](./images/tc36.png)
+    
+22. i,95,삽입,기본 삽입
+    
+    ![tc37.png](./images/tc37.png)
+    
+23. i,110,삽입,분할 재귀
+    
+    ![tc38.png](./images/tc38.png)
+    
+    ![tc39.png](./images/tc39.png)
+    
+    ![tc40.png](./images/tc40.png)
+    
+24. i,160,삽입,기본 삽입
+    
+    ![tc41.png](./images/tc41.png)
+    
+25. i,180,삽입,노드 분할
+    
+    ![tc42.png](./images/tc42.png)
+    
+    ![tc43.png](./images/tc43.png)
+    
+26. i,155,삽입,기본 삽입
+    
+    ![tc44.png](./images/tc44.png)
+    
+27. i,165,삽입,분할 재귀/높이 증가
+    
+    ![tc45.png](./images/tc45.png)
+    
+    ![tc46.png](./images/tc46.png)
+    
+    ![tc47.png](./images/tc47.png)
+    
+    ![tc48.png](./images/tc48.png)
+    
+28. d,10,삭제,병합 재귀/높이 감소
+    
+    ![tc49.png](./images/tc49.png)
+    
+    ![tc50.png](./images/tc50.png)
+    
+    ![tc51.png](./images/tc51.png)
+    
+    ![tc52.png](./images/tc52.png)
