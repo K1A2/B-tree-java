@@ -555,7 +555,7 @@ public class BTree {
                 for (int i : nowNode.getKeys()) {
                     if (i != NODE_DATA_NULL) System.out.printf("%d ", i);
                 }
-                System.out.printf("] -- ");
+                System.out.printf("] ");
                 for (Node n : nowNode.getChildrenNodes()) {
                     if (n != null) deque.add(new Object[]{n, level + 1});
                 }

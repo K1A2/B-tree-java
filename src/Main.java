@@ -1,7 +1,4 @@
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -92,32 +89,88 @@ public class Main {
         }
     }
 
+    public static void testcase() {
+        int order = 3;
+        BTree bTree = new BTree(3);
+        Visualization visualization = new Visualization();
+
+        System.out.println("=================== 테스트 케이스 실행 ===================");
+        System.out.println("테스트 케이스 출력은 차수가 3으로 고정됩니다.");
+
+        System.out.println("\n트리 출력 방식");
+        System.out.printf("입력 1: 콘솔에서 텍스트로 출력\n입력 2: GUI로 출력\n입력 3: 둘 다 출력\n");
+
+        Scanner scanner = new Scanner(System.in);
+        int printMethod = getNumber(1, 3, "트리 출력 방식: ");
+
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("test_case.txt"));
+            String str;
+            while ((str = reader.readLine()) != null) {
+                String[] str_s = str.split(",");
+                System.out.println("-- " + str_s[2] + " " + str_s[1] + ", " + str_s[3] + " --");
+                switch (str_s[0]) {
+                    case "i":
+                        bTree.insertNode(Integer.parseInt(str_s[1]));
+                        break;
+                    case "d":
+                        bTree.deleteNode(Integer.parseInt(str_s[1]));
+                        break;
+                    default:
+                        throw new Exception();
+                }
+                if (printMethod != 2) bTree.print();
+                if (printMethod >= 2) {
+                    visualization.setInformation(bTree.getTreeData());
+                    visualization.show(false);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("케이스를 저장한 파일을 찾을 수 없습니다.");
+        } catch (Exception e) {
+            System.out.println("오류 발생: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public static int getNumber(int min, int max, String msg) {
+        Scanner scanner = new Scanner(System.in);
+        int num = 0;
+        do {
+            try {
+                System.out.printf(msg);
+                num = scanner.nextInt();
+            } catch (Exception e) {
+                num = -1;
+                scanner = new Scanner(System.in);
+            }
+        } while (num < min || num > max);
+
+        return num;
+    }
+
+    public static int getOrder() {
+        return getNumber(3, Integer.MAX_VALUE, "차수 입력: ");
+    }
+
     public static void main(String[] args) {
         System.out.println("=================== B-tree 구현 ===================");
 
-        Scanner scanner = new Scanner(System.in);
-        int order = 3;
-
-        do {
-            try {
-                System.out.printf("차수 입력: ");
-                order = scanner.nextInt();
-            } catch (Exception e) {
-                order = -1;
-                scanner = new Scanner(System.in);
-            }
-        } while (order < 3);
-
-        System.out.printf("입력 1: 랜덤한 값으로 테스트\n입력 2: 직접 명령어를 입력해서 테스트\n입력: ");
-        switch (scanner.nextInt()) {
+        System.out.printf("입력 1: 랜덤한 값으로 테스트\n입력 2: 직접 명령어를 입력해서 테스트\n입력 3: 테스트 케이스 실행\n");
+        int selected = getNumber(1, 3, "실행할 모드: ");
+        switch (selected) {
             case 1:
-                random(order);
+                random(getOrder());
                 break;
             case 2:
-                input(order);
+                input(getOrder());
+                break;
+            case 3:
+                testcase();
                 break;
             default:
                 System.out.println("종료");
         }
+        System.exit(0);
     }
 }
